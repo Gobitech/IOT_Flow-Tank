@@ -1,0 +1,341 @@
+[
+    {
+        "id": "642da8d40e521942",
+        "type": "tab",
+        "label": "Home",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6ee527c7aa1596b6",
+        "type": "ui_button",
+        "z": "642da8d40e521942",
+        "name": "",
+        "group": "cf5d780e9690fd28",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Add Device",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"tab\":\"AddDevice\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "3db5376440cc026f"
+            ]
+        ]
+    },
+    {
+        "id": "e7eac4563e014233",
+        "type": "ui_button",
+        "z": "642da8d40e521942",
+        "name": "",
+        "group": "cf5d780e9690fd28",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Add Process",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"tab\":\"AddProcess\"}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "915179992d3fefce"
+            ]
+        ]
+    },
+    {
+        "id": "3db5376440cc026f",
+        "type": "ui_ui_control",
+        "z": "642da8d40e521942",
+        "name": "",
+        "events": "all",
+        "x": 560,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "915179992d3fefce",
+        "type": "ui_ui_control",
+        "z": "642da8d40e521942",
+        "name": "",
+        "events": "all",
+        "x": 560,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dd2973243ed46cab",
+        "type": "function",
+        "z": "642da8d40e521942",
+        "name": "function 11",
+        "func": "var username = global.get(\"userName\")\nmsg.childpath = \"user/\" + username + '/' + \"idDevice\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 480,
+        "wires": [
+            [
+                "4d05fa5ef56bdd14"
+            ]
+        ]
+    },
+    {
+        "id": "4b84f2df5a139249",
+        "type": "function",
+        "z": "642da8d40e521942",
+        "name": "function 12",
+        "func": "msg.payload = JSON.stringify(msg.payload);\nmsg.payload = msg.payload.substring(1, msg.payload.length-1)\nmsg.payload = msg.payload.substring(1, msg.payload.length - 1)\nmsg.payload = msg.payload.split(\",\")\nconst device =[]\nfor (let i = 0; i < msg.payload.length; i++)\n{\n    device.push(msg.payload[i].split(\":\").shift().replace('\"','').replace('\"','') + '\\n')\n}\nmsg.payload = device\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1290,
+        "y": 480,
+        "wires": [
+            [
+                "5359ee744564b139"
+            ]
+        ]
+    },
+    {
+        "id": "5359ee744564b139",
+        "type": "ui_template",
+        "z": "642da8d40e521942",
+        "group": "12dc0117bf8444cd",
+        "name": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<div ng-bind-html=\"msg.payload\"></div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1460,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "368a70562143ecfb",
+        "type": "ui_button",
+        "z": "642da8d40e521942",
+        "name": "",
+        "group": "12dc0117bf8444cd",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Get id Device",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 420,
+        "y": 480,
+        "wires": [
+            [
+                "dd2973243ed46cab"
+            ]
+        ]
+    },
+    {
+        "id": "4d05fa5ef56bdd14",
+        "type": "firebase.on",
+        "z": "642da8d40e521942",
+        "name": "",
+        "firebaseconfig": "",
+        "childpath": "msg.childpath",
+        "atStart": true,
+        "eventType": "value",
+        "queries": [],
+        "x": 970,
+        "y": 480,
+        "wires": [
+            [
+                "4b84f2df5a139249"
+            ]
+        ]
+    },
+    {
+        "id": "6bb780b631a31c51",
+        "type": "function",
+        "z": "642da8d40e521942",
+        "name": "function 13",
+        "func": "global.set(\"idDevice\", msg.payload.idDevice)\nmsg.childpath = \"Device/\" + msg.payload.idDevice\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 340,
+        "wires": [
+            [
+                "117bf28431c19726"
+            ]
+        ]
+    },
+    {
+        "id": "117bf28431c19726",
+        "type": "firebase.once",
+        "z": "642da8d40e521942",
+        "name": "",
+        "firebaseconfig": "",
+        "childpath": "msg.childpath",
+        "repeatifnull": false,
+        "eventType": "value",
+        "queries": [],
+        "x": 1020,
+        "y": 340,
+        "wires": [
+            [
+                "f92b237fc864b903"
+            ]
+        ]
+    },
+    {
+        "id": "f92b237fc864b903",
+        "type": "function",
+        "z": "642da8d40e521942",
+        "name": "function 14",
+        "func": "\nif(msg.payload != null)\n{\n    msg.payload = { \"tab\": \"Device\" }\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1370,
+        "y": 340,
+        "wires": [
+            [
+                "51ca42aa9e7004a3"
+            ]
+        ]
+    },
+    {
+        "id": "62952f532679957e",
+        "type": "ui_form",
+        "z": "642da8d40e521942",
+        "name": "",
+        "label": "",
+        "group": "0f5ad18e9dcba713",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "idDevice",
+                "value": "idDevice",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "idDevice": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 470,
+        "y": 340,
+        "wires": [
+            [
+                "6bb780b631a31c51"
+            ]
+        ]
+    },
+    {
+        "id": "51ca42aa9e7004a3",
+        "type": "ui_ui_control",
+        "z": "642da8d40e521942",
+        "name": "",
+        "events": "all",
+        "x": 1560,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cf5d780e9690fd28",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "ebbd1cf85ee67044",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "12dc0117bf8444cd",
+        "type": "ui_group",
+        "name": "List Device",
+        "tab": "ebbd1cf85ee67044",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "0f5ad18e9dcba713",
+        "type": "ui_group",
+        "name": "Device's schedule",
+        "tab": "ebbd1cf85ee67044",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "ebbd1cf85ee67044",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": true
+    }
+]
